@@ -2,8 +2,6 @@ local ACTION_TYPE = {}
 ACTION_TYPE.__index = ACTION_TYPE
 ACTION_TYPE.registered = {}
 
-print('loaded')
-
 function ACTION_TYPE.new(id)
   local self = setmetatable({}, ACTION_TYPE)
   ACTION_TYPE.registered[id] = self
@@ -14,9 +12,14 @@ function ACTION_TYPE.get(id)
   return ACTION_TYPE.registered[id]
 end
 
+-- Override
 function ACTION_TYPE:handle(ply, data)
-  -- Override
   return false 
+end
+
+-- Override
+function ACTION_TYPE:onExpire(ply, data)
+  return true
 end
 
 Cosmo.ActionType = ACTION_TYPE

@@ -14,3 +14,5 @@ Cosmo.Config.MySQL = {
 }
 
 Cosmo.Config.CheckTime = 60
+
+Cosmo.Config.ServerId = 1

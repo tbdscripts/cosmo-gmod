@@ -38,23 +38,27 @@ function PROMISE:reject(...)
 end
 
 function PROMISE:resolved(func)
-  if not isfunction(func) or self.status == PROMISE_REJECTED then return end
+  if not isfunction(func) or self.status == PROMISE_REJECTED then return self end
 
   if self.status == PROMISE_RESOLVED then
     self:callResolvers(unpack(self.resolveData))
   else
     table.insert(self.resolvers, func)
   end
+
+  return self
 end
 
 function PROMISE:rejected(func)
-  if not isfunction(func) or self.status == PROMISE_RESOLVED then return end
+  if not isfunction(func) or self.status == PROMISE_RESOLVED then return self end
 
   if self.status == PROMISE_REJECTED then
     self:callRejectors(unpack(self.rejectData))
   else
     table.insert(self.rejectors, func)
   end
+
+  return self
 end
 
 function PROMISE:callResolvers(...)

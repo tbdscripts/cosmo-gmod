@@ -37,7 +37,7 @@ function DB:query(qs, ...)
 
   query.onSuccess = function(q, data)
     promise:resolve(data)
-    Cosmo:logDebug("Query executed:", sqlStr)
+    --Cosmo:logDebug("Query executed:", sqlStr)
   end
   query.onError = function(q, err)
     promise:reject(err)
@@ -54,18 +54,61 @@ function DB:escape(qs)
   return string.format("'%s'", self.con:escape(qs))
 end
 
-function DB:getPendingActions()
+function DB:getPendingTransactions()
+  return self:query([[
+    SELECT t.id, t.receiver, p.name AS `package_name`
+    FROM transactions t
+      INNER JOIN packages p on t.package_id = p.id
+    WHERE status = 'waiting_for_package'
+      AND %s IN (SELECT packageable_id
+                  FROM packageables pkg
+                  WHERE packageable_type = 'App\\Models\\Index\\Server'
+                  AND t.package_id = pkg.package_id);
+  ]], Cosmo.Config.ServerId)
+end
+
+function DB:getPendingTransactionActions(transId)
   return self:query([[
     SELECT `id`, `name`, `data`, `receiver`
     FROM `actions`
-    WHERE `delivered_at` IS NULL;
-  ]])
+    WHERE `delivered_at` IS NULL AND `transaction_id` = %s AND `active` = FALSE;
+  ]], transId)
 end
 
 function DB:completeAction(id)
   return self:query([[
     UPDATE `actions`
-    SET `delivered_at` = CURRENT_TIMESTAMP()
+    SET `delivered_at` = CURRENT_TIMESTAMP(), `active` = TRUE
+    WHERE `id` = %s;
+  ]], id)
+end
+
+function DB:deliverTransaction(id)
+  return self:query([[
+    UPDATE `transactions`
+    SET `status` = 'delivered'
+    WHERE `id` = %s
+  ]], id)
+end
+
+function DB:getExpiredActions()
+  return self:query([[
+    SELECT `id`, `name`, `receiver`, `data`
+    FROM `actions`
+      INNER JOIN transactions t on actions.transaction_id = t.id
+    WHERE `expires_at` < CURRENT_TIMESTAMP
+      AND `active` = TRUE
+      AND %s IN (SELECT packageable_id
+                  FROM packageables pkg
+                  WHERE packageable_type = 'App\\Models\\Index\\Server'
+                  AND t.package_id = pkg.package_id);
+  ]], Cosmo.Config.ServerId)
+end
+
+function DB:expireAction(id)
+  return self:query([[
+    UPDATE `actions`
+    SET `active` = FALSE
     WHERE `id` = %s;
   ]], id)
 end

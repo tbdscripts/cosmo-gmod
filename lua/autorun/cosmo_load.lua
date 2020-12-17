@@ -88,3 +88,7 @@ Cosmo:loadDirectory("cosmo/libs")
 
 Cosmo:loadFile("cosmo/core/sv_database")
 Cosmo:loadFile("cosmo/core/sv_core")
+
+Cosmo:loadDirectory("cosmo/network")
+
+Cosmo:loadFile("cosmo/core/cl_notification")
