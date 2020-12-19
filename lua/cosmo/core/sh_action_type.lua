@@ -14,7 +14,7 @@ end
 
 -- Override
 function ACTION_TYPE:handle(ply, data)
-  return false 
+  return false
 end
 
 -- Override
