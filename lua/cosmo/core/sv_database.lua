@@ -7,17 +7,17 @@ function DB.new()
   return self
 end
 
-function DB:init(creds)
+function DB:init()
   require("mysqloo")
   if not mysqloo then return end
 
   local creds = Cosmo.Config.MySQL
   local db = mysqloo.connect(creds.host, creds.username, creds.password, creds.database, creds.port)
 
-  db.onConnected = function(db)
+  db.onConnected = function()
     self:log("Database connection successful")
   end
-  db.onConnectionFailed = function(db, err)
+  db.onConnectionFailed = function(_, err)
     self:log("Database connection failed:", err)
   end
 
