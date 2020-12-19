@@ -1,19 +1,27 @@
 local PANEL = {}
 
-local function scale(num)
-  return ScrH() / 1080 * num
+local scale
+local function registerFonts()
+  local scrH = ScrH()
+  scale = function(num)
+    return scrH / 1080 * num
+  end
+
+  surface.CreateFont("Cosmo.Notification.Title", {
+    font = "Roboto",
+    size = scale(20)
+  })
+
+  surface.CreateFont("Cosmo.Notification.Content", {
+    font = "Roboto",
+    size = scale(18)
+  })
 end
 
-surface.CreateFont("Cosmo.Notification.Title", {
-  font = "Roboto",
-  size = scale(20)
-})
+registerFonts()
+hook.Add("OnScreenSizeChanged", "Cosmo.ReRegisterFonts", registerFonts)
 
-surface.CreateFont("Cosmo.Notification.Content", {
-  font = "Roboto",
-  size = scale(18)
-})
-
+local is_valid = IsValid
 local surface_SetDrawColor = surface.SetDrawColor
 local surface_DrawRect = surface.DrawRect
 local draw_SimpleText = draw.SimpleText
@@ -25,7 +33,7 @@ function PANEL:Init()
 
   self.header = self:Add("Panel")
   self.header:Dock(TOP)
-  
+
   self.header.Paint = function(pnl, w, h)
     surface_SetDrawColor(self.theme.header)
     surface_DrawRect(0, 0, w, h)
@@ -43,7 +51,7 @@ function PANEL:Init()
 end
 
 function PANEL:SetData(ply, packageName)
-  if not IsValid(ply) then
+  if not is_valid(ply) then
     return self:Remove()
   end
 
@@ -78,7 +86,7 @@ function Cosmo:pushNotification(ply, packageName)
   local pos = -1
   repeat
     pos = pos + 1
-  until (not IsValid(activeNotifs[pos]))
+  until (not is_valid(activeNotifs[pos]))
 
   local notifH, margin = scale(100), scale(25)
   local scrW, notifW, yPos = ScrW(), scale(300), margin + (margin + notifH) * pos
@@ -91,7 +99,7 @@ function Cosmo:pushNotification(ply, packageName)
   notif:MoveTo(scrW - notifW - 25, yPos, .3)
 
   notif:AlphaTo(0, .3, Cosmo.Config.NotificationTime, function()
-    if IsValid(notif) then
+    if is_valid(notif) then
       notif:Remove()
     end
   end)
