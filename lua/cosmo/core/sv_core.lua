@@ -102,16 +102,16 @@ function Cosmo:handleExpiredAction(action)
   self:logDebug("Finished handling expired action: " .. action.id)
 end
 
-local CurTime = CurTime
-local nextCheck = CurTime()
+local curTime = CurTime
+local nextCheck = curTime()
 
 -- Using a Think hook because timer.Create tends to desync if the server has been up for long
 hook.Add("Think", "Cosmo.CheckForPendingTransactions", function()
-  local curTime = CurTime()
-  if nextCheck > curTime then return end
-  
+  local time = curTime()
+  if nextCheck > time then return end
+
   Cosmo:checkForPendingTransactions()
   Cosmo:checkForExpiredActions()
 
-  nextCheck = curTime + Cosmo.Config.CheckTime
+  nextCheck = time + Cosmo.Config.CheckTime
 end)
