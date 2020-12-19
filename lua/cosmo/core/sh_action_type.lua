@@ -13,7 +13,7 @@ function ACTION_TYPE.get(id)
 end
 
 -- Override
-function ACTION_TYPE:handle(ply, data)
+function ACTION_TYPE:onBought(ply, data)
   return false 
 end
 

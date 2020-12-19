@@ -55,7 +55,7 @@ function Cosmo:handlePendingAction(ply, transaction, action)
   self:logDebug("Handling action: " .. action.id)
 
   local data = util.JSONToTable(action.data) or {}
-  local result = actionType:handle(ply, data)
+  local result = actionType:onBought(ply, data)
   if not result then return end
 
   self.DB:completeAction(action.id)
