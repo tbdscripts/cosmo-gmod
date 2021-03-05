@@ -33,7 +33,7 @@ function PANEL:Init()
 
   self.header = self:Add("Panel")
   self.header:Dock(TOP)
-
+  
   self.header.Paint = function(pnl, w, h)
     surface_SetDrawColor(self.theme.header)
     surface_DrawRect(0, 0, w, h)

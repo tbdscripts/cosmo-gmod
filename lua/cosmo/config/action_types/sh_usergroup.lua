@@ -2,7 +2,9 @@ local USERGROUP = Cosmo.ActionType.new("usergroup")
 
 local function setUsergroup(ply, usergroup)
   if sam then
-    print(ply, usergroup)
+    sam.player.set_rank(ply, usergroup)
+  elseif xAdmin then
+    xAdmin.SetGroup(ply, usergroup)
   else
     Cosmo:log("No valid admin system found.")
     return false
@@ -11,7 +13,7 @@ local function setUsergroup(ply, usergroup)
   return true
 end
 
-function USERGROUP:handle(ply, data)
+function USERGROUP:onBought(ply, data)
   local group = data.group
   if not group then return false end
 

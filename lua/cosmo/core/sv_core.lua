@@ -33,9 +33,8 @@ function Cosmo:handlePendingTransaction(transaction)
 
       if not hasFailed then
         self.DB:deliverTransaction(transaction.id)
+        self.Network:sendPurchaseNotification(ply, transaction.package_name)
       end
-
-      self.Network:sendPurchaseNotification(ply, transaction.package_name)
     end)
     :rejected(function(err)
       self:log("(ERROR) Pulling pending actions for transaction (" .. transaction.id .. ") failed.")
@@ -95,23 +94,23 @@ function Cosmo:handleExpiredAction(action)
   self:logDebug("Handling expired action: " .. action.id)
 
   local data = util.JSONToTable(action.data) or {}
-  local result = actionType:onExpired(ply, data)
+  local result = actionType:onExpired(ply, data, action)
   if not result then return end
 
   self.DB:expireAction(action.id)
   self:logDebug("Finished handling expired action: " .. action.id)
 end
 
-local curTime = CurTime
-local nextCheck = curTime()
+local CurTime = CurTime
+local nextCheck = CurTime()
 
 -- Using a Think hook because timer.Create tends to desync if the server has been up for long
 hook.Add("Think", "Cosmo.CheckForPendingTransactions", function()
-  local time = curTime()
-  if nextCheck > time then return end
-
+  local curTime = CurTime()
+  if nextCheck > curTime then return end
+  
   Cosmo:checkForPendingTransactions()
   Cosmo:checkForExpiredActions()
 
-  nextCheck = time + Cosmo.Config.CheckTime
+  nextCheck = curTime + Cosmo.Config.CheckTime
 end)

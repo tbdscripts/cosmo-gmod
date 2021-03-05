@@ -7,17 +7,19 @@ function DB.new()
   return self
 end
 
-function DB:init()
+function DB:init(creds)
   require("mysqloo")
   if not mysqloo then return end
 
   local creds = Cosmo.Config.MySQL
   local db = mysqloo.connect(creds.host, creds.username, creds.password, creds.database, creds.port)
 
-  db.onConnected = function()
+  db.onConnected = function(db)
     self:log("Database connection successful")
+
+    hook.Run("Cosmo.DatabaseConnected")
   end
-  db.onConnectionFailed = function(_, err)
+  db.onConnectionFailed = function(db, err)
     self:log("Database connection failed:", err)
   end
 
@@ -93,9 +95,9 @@ end
 
 function DB:getExpiredActions()
   return self:query([[
-    SELECT `id`, `name`, `receiver`, `data`
-    FROM `actions`
-      INNER JOIN transactions t on actions.transaction_id = t.id
+    SELECT a.id, a.name, a.receiver, a.data
+    FROM `actions` a
+      INNER JOIN transactions t on a.transaction_id = t.id
     WHERE `expires_at` < CURRENT_TIMESTAMP
       AND `active` = TRUE
       AND %s IN (SELECT packageable_id
@@ -111,6 +113,14 @@ function DB:expireAction(id)
     SET `active` = FALSE
     WHERE `id` = %s;
   ]], id)
+end
+
+function DB:getPlayerWeaponActions(sid64)
+  return self:query([[
+    SELECT `id`, `data`
+    FROM `actions`
+    WHERE `receiver` = %s AND `active` = TRUE AND `name` = 'weapons'
+  ]], sid64)
 end
 
 function DB:log(msg)

@@ -4,6 +4,8 @@ local function replaceStrings(code, ply)
   code = code:Replace(":sid64", ply:SteamID64())
   code = code:Replace(":sid", ply:SteamID64())
   code = code:Replace(":nick", ply:Nick())
+
+  return code
 end
 
 function CUSTOM_LUA:onBought(ply, data)
