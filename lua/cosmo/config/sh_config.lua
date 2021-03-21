@@ -1,6 +1,6 @@
 Cosmo.Config = Cosmo.Config or {}
 
-Cosmo.Config.Debug = true
+Cosmo.Config.Debug = false
 
 Cosmo.Config.NotificationTime = 3
 
