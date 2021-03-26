@@ -6,6 +6,8 @@ function DARKRP_MONEY:onBought(ply, data)
   local amount = tonumber(data.amount)
   if not amount then return false end
 
+  if not DarkRP then return false end
+
   ply:addMoney(amount)
   return true
 end

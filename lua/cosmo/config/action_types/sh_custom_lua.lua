@@ -12,7 +12,7 @@ function CUSTOM_LUA:onBought(ply, data)
   local code = data.on_bought
   if not code then return false end
 
-  RunString(replaceStrings(code), "Cosmo Action")
+  RunString(replaceStrings(code, ply), "Cosmo Action")
   return true
 end
 
@@ -20,6 +20,6 @@ function CUSTOM_LUA:onExpired(ply, data)
   local code = data.on_expired
   if not code then return false end
 
-  RunString(replaceStrings(code), "Cosmo Action")
+  RunString(replaceStrings(code, ply), "Cosmo Action")
   return true
 end

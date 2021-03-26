@@ -8,7 +8,7 @@ local function setUsergroup(ply, usergroup)
   elseif ulx and ULib then
     ULib.ucl.addUser(ply:SteamID(), usergroup)
   else
-    Cosmo:log("No valid admin system found.")
+    Cosmo:log("No supported admin system found.")
     return false
   end
 
