@@ -5,3 +5,7 @@ net.Receive("Cosmo.PurchaseNotification", function()
 
   Cosmo:pushNotification(ply, packageName)
 end)
+
+net.Receive("Cosmo.DonateCommand", function()
+  gui.OpenURL(Cosmo.Config.DonateUrl)
+end)

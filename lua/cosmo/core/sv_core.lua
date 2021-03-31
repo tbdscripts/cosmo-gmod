@@ -114,3 +114,9 @@ hook.Add("Think", "Cosmo.CheckForPendingTransactions", function()
 
   nextCheck = curTime + Cosmo.Config.CheckTime
 end)
+
+hook.Add("PlayerSay", "Cosmo.DonateCommand", function(ply, text)
+  if not IsValid(ply) or text ~= Cosmo.Config.ChatCommand then return end
+
+  Cosmo.Network:openDonateCommand(ply)
+end)
