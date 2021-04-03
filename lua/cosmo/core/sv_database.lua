@@ -20,7 +20,7 @@ function DB:init(creds)
     hook.Run("Cosmo.DatabaseConnected")
   end
   db.onConnectionFailed = function(db, err)
-    self:log("Database connection failed:", err)
+    self:log("Database connection failed: " .. err)
   end
 
   db:connect()

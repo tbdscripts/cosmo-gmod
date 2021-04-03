@@ -12,7 +12,7 @@ function CONCOMMAND:onBought(ply, data)
   local cmd = data.cmd
   if not cmd then return false end
 
-  game.ConsoleCommand(replaceStrings(cmd, ply))
+  game.ConsoleCommand(replaceStrings(cmd, ply) .. "\n")
   return true
 end
 
