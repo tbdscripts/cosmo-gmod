@@ -6,7 +6,7 @@ local function setUsergroup(ply, usergroup)
   elseif xAdmin then
     xAdmin.SetGroup(ply, usergroup)
   elseif ulx and ULib then
-    ULib.ucl.addUser(ply:SteamID(), usergroup)
+    ply:SetUserGroup(usergroup)
   else
     Cosmo:log("No supported admin system found.")
     return false
