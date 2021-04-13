@@ -1,10 +1,14 @@
 local WEAPONS = Cosmo.ActionType.new("weapons")
 
-local function giveWeapons(ply, classes)
+local function giveWeapons(ply, classes, isPerm)
   if not istable(classes) then return end
 
   for _, class in ipairs(classes) do
-    ply:Give(class)
+    local wep = ply:Give(class)
+
+    if isPerm then
+      wep.__cosmo = true
+    end
   end
 end
 
@@ -31,7 +35,7 @@ WEAPONS:addHook("PlayerLoadout", function(ply)
   if not ply.__cosmoWeapons then return end
 
   for _, action in pairs(ply.__cosmoWeapons) do
-    giveWeapons(ply, action.data.classes)
+    giveWeapons(ply, action.data.classes, true)
   end
 end)
 
@@ -53,4 +57,8 @@ WEAPONS:addHook("PlayerInitialSpawn", function(ply)
 
       ply.__cosmoWeapons = wepClasses
     end)
+end)
+
+WEAPONS:addHook("canDropWeapon", function(ply, weapon)
+  if weapon.__cosmo then return false end
 end)
