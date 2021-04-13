@@ -2,7 +2,7 @@ local CONCOMMAND = Cosmo.ActionType.new("console_command")
 
 local function replaceStrings(cmd, ply)
   cmd = cmd:Replace(":sid64", ply:SteamID64())
-  cmd = cmd:Replace(":sid", ply:SteamID64())
+  cmd = cmd:Replace(":sid", ply:SteamID())
   cmd = cmd:Replace(":nick", ply:Nick())
 
   return cmd
