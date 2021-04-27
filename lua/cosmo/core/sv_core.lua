@@ -1,49 +1,49 @@
-function Cosmo:checkForPendingTransactions()
-  self:logDebug("Checking for pending transactions...")
+function Cosmo:checkForPendingOrders()
+  self:logDebug("Checking for pending orders...")
 
-  self.DB:getPendingTransactions()
+  self.DB:getPendingOrders()
     :resolved(function(data)
       if self.Config.Debug then
-        self:logDebug("Attemping to handle " .. table.Count(data) .. " pending transactions.")
+        self:logDebug("Attemping to handle " .. table.Count(data) .. " pending orders.")
       end
 
-      for _, transaction in pairs(data) do
-        self:handlePendingTransaction(transaction)
+      for _, order in pairs(data) do
+        self:handlePendingOrder(order)
       end
     end)
     :rejected(function(err)
-      self:log("(ERROR) Checking for pending transactions failed.")
+      self:log("(ERROR) Checking for pending orders failed.")
     end)
 end
 
-function Cosmo:handlePendingTransaction(transaction)
-  local ply = player.GetBySteamID64(transaction.receiver)
+function Cosmo:handlePendingOrder(order)
+  local ply = player.GetBySteamID64(order.receiver)
   if not IsValid(ply) then return end
 
-  self.DB:getPendingTransactionActions(transaction.id)
+  self.DB:getPendingOrderActions(order.id)
     :resolved(function(data)
       local hasFailed = false
 
       for _, action in pairs(data) do
-        local success = self:handlePendingAction(ply, transaction, action)
+        local success = self:handlePendingAction(ply, order, action)
         if not success then
           hasFailed = true
         end
       end
 
       if not hasFailed then
-        self.DB:deliverTransaction(transaction.id)
-        self.Network:sendPurchaseNotification(ply, transaction.package_name)
+        self.DB:deliverOrder(order.id)
+        self.Network:sendPurchaseNotification(ply, order.package_name)
       end
     end)
     :rejected(function(err)
-      self:log("(ERROR) Pulling pending actions for transaction (" .. transaction.id .. ") failed.")
+      self:log("(ERROR) Pulling pending actions for order (" .. order.id .. ") failed.")
       self:logDebug(err)
     end)
 end
 
-function Cosmo:handlePendingAction(ply, transaction, action)
-  if transaction.receiver ~= action.receiver or transaction.receiver ~= ply:SteamID64() then return end
+function Cosmo:handlePendingAction(ply, order, action)
+  if order.receiver ~= action.receiver or order.receiver ~= ply:SteamID64() then return end
 
   local actionType = Cosmo.ActionType.get(action.name)
   if not actionType then
@@ -105,11 +105,11 @@ local CurTime = CurTime
 local nextCheck = CurTime()
 
 -- Using a Think hook because timer.Create tends to desync if the server has been up for long
-hook.Add("Think", "Cosmo.CheckForPendingTransactions", function()
+hook.Add("Think", "Cosmo.CheckForPendingOrders", function()
   local curTime = CurTime()
   if nextCheck > curTime then return end
   
-  Cosmo:checkForPendingTransactions()
+  Cosmo:checkForPendingOrders()
   Cosmo:checkForExpiredActions()
 
   nextCheck = curTime + Cosmo.Config.CheckTime

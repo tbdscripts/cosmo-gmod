@@ -56,25 +56,25 @@ function DB:escape(qs)
   return string.format("'%s'", self.con:escape(qs))
 end
 
-function DB:getPendingTransactions()
+function DB:getPendingOrders()
   return self:query([[
-    SELECT t.id, t.receiver, p.name AS `package_name`
-    FROM transactions t
-      INNER JOIN packages p on t.package_id = p.id
-    WHERE status = 'waiting_for_package'
+    SELECT o.id, o.receiver, p.name AS `package_name`
+    FROM orders o
+      INNER JOIN packages p on o.package_id = p.id
+    WHERE o.status = 'waiting_for_package'
       AND %s IN (SELECT packageable_id
                   FROM packageables pkg
                   WHERE packageable_type = 'App\\Models\\Index\\Server'
-                  AND t.package_id = pkg.package_id);
+                  AND o.package_id = pkg.package_id);
   ]], Cosmo.Config.ServerId)
 end
 
-function DB:getPendingTransactionActions(transId)
+function DB:getPendingOrderActions(orderId)
   return self:query([[
     SELECT `id`, `name`, `data`, `receiver`
     FROM `actions`
-    WHERE `delivered_at` IS NULL AND `transaction_id` = %s AND `active` = FALSE;
-  ]], transId)
+    WHERE `delivered_at` IS NULL AND `order_id` = %s AND `active` = FALSE;
+  ]], orderId)
 end
 
 function DB:completeAction(id)
@@ -85,9 +85,9 @@ function DB:completeAction(id)
   ]], id)
 end
 
-function DB:deliverTransaction(id)
+function DB:deliverOrder(id)
   return self:query([[
-    UPDATE `transactions`
+    UPDATE `orders`
     SET `status` = 'delivered'
     WHERE `id` = %s
   ]], id)
@@ -97,13 +97,13 @@ function DB:getExpiredActions()
   return self:query([[
     SELECT a.id, a.name, a.receiver, a.data
     FROM `actions` a
-      INNER JOIN transactions t on a.transaction_id = t.id
+      INNER JOIN orders o on a.order_id = o.id
     WHERE `expires_at` < CURRENT_TIMESTAMP
       AND `active` = TRUE
       AND %s IN (SELECT packageable_id
                   FROM packageables pkg
                   WHERE packageable_type = 'App\\Models\\Index\\Server'
-                  AND t.package_id = pkg.package_id);
+                  AND o.package_id = pkg.package_id);
   ]], Cosmo.Config.ServerId)
 end
 
