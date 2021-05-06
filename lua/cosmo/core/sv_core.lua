@@ -51,6 +51,8 @@ function Cosmo:handlePendingAction(ply, order, action)
     return
   end
 
+  if not isfunction(actionType.onBought) then return end
+
   self:logDebug("Handling action: " .. action.id)
 
   local data = util.JSONToTable(action.data) or {}
@@ -90,6 +92,8 @@ function Cosmo:handleExpiredAction(action)
     self:logDebug("Expired action (" .. action.id .. ") has an invalid action type: " .. action.name)
     return
   end
+
+  if not isfunction(actionType.onExpired) then return end
 
   self:logDebug("Handling expired action: " .. action.id)
 
