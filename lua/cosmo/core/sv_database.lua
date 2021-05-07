@@ -8,8 +8,10 @@ function DB.new()
 end
 
 function DB:init(creds)
-  require("mysqloo")
-  if not mysqloo then return end
+  if not pcall(require, "mysqloo") then
+    self:log("MySQLoo module is not installed, Cosmo requires this to be installed!")
+    return
+  end
 
   local creds = Cosmo.Config.MySQL
   local db = mysqloo.connect(creds.host, creds.username, creds.password, creds.database, creds.port)
