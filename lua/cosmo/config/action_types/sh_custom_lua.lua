@@ -3,7 +3,7 @@ local CUSTOM_LUA = Cosmo.ActionType.new("custom_lua")
 local function replaceStrings(code, ply)
   code = code:Replace(":sid64", ply:SteamID64())
   code = code:Replace(":sid", ply:SteamID64())
-  code = code:Replace(":nick", ply:Nick())
+  code = code:Replace(":nick", ply:Nick():gsub("[;\"']", ""))
 
   return code
 end
