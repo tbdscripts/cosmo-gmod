@@ -1,4 +1,5 @@
 Cosmo = Cosmo or {}
+Cosmo.ActionMeta = Cosmo.ActionMeta or {}
 
 -- Set to false on production
 Cosmo.Debug = true
