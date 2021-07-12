@@ -3,7 +3,7 @@ Cosmo.Config = Cosmo.Config or {}
 Cosmo.Config.ChatCommand = "!donate"
 Cosmo.Config.DonateUrl = "https://yourdomain.com/store"
 
-Cosmo.Config.Debug = false
+Cosmo.Debug = false
 
 Cosmo.Config.NotificationTime = 3
 
