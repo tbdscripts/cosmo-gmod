@@ -57,3 +57,6 @@ Cosmo.LoadDirectory("cosmo/action_types")
 
 Cosmo.LoadFile("cosmo/core/sv_http.lua")
 Cosmo.LoadFile("cosmo/core/sv_store.lua")
+
+Cosmo.LoadFile("cosmo/network/sv_network.lua")
+Cosmo.LoadFile("cosmo/network/cl_network.lua")

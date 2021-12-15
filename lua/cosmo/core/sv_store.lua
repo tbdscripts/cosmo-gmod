@@ -98,3 +98,9 @@ hook.Add("Think", "Cosmo.Store.FetchPending", function()
 
     nextFetch = CurTime() + Cosmo.Config.FetchInterval
 end)
+
+hook.Add("PlayerSay", "Cosmo.DonateCommand", function(ply, text)
+    if not IsValid(ply) or text ~= Cosmo.Config.DonateCommand then return end
+  
+    Cosmo.Network:openDonateCommand(ply)
+end)
