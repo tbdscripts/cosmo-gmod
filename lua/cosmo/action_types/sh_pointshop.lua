@@ -1,0 +1,28 @@
+local POINTSHOP = Cosmo.ActionType.New("pointshop")
+
+function POINTSHOP:HandlePurchase(action, order, ply)
+    if not isfunction(ply.PS_GivePoints) then
+        print("[Cosmo - STORE] Pointshop not found on the server.") 
+        return false
+    end
+    
+    local amount = action.data.amount
+    if not amount then return false end
+
+    amount = tonumber(amount)
+    if not amount then return false end
+
+    if amount < 0 and isfunction(ply.PS_TakePoints) then
+        ply:PS_TakePoints(amount)
+    elseif amount > 0 then
+        ply:PS_GivePoints(amount)
+    end
+
+    return true
+end
+
+function POINTSHOP:HandleExpiration(action, order, ply)
+    -- NOOP 
+end
+
+Cosmo.ActionType.Register(POINTSHOP)
