@@ -38,8 +38,6 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
     local url = (self.Defaults.BaseUrl or "") .. "/" .. trimLeft(endpoint, "/")
     local promise = Cosmo.Promise.new()
 
-    print(url)
-
     HTTP({
         method = verb,
         url = url,
