@@ -1,6 +1,6 @@
 Cosmo.Config = Cosmo.Config or {}
 
-Cosmo.Config.InstanceUrl = "https://demo.tbdscripts.com"
+Cosmo.Config.InstanceUrl = "https://your.domain"
 
 Cosmo.Config.DonateCommand = "!donate"
 
