@@ -1,4 +1,4 @@
-// http://pointshop2.kamshak.com/en/latest/api/index.html#player-integration
+-- http://pointshop2.kamshak.com/en/latest/api/index.html#player-integration
 
 -- Standard Points
 
