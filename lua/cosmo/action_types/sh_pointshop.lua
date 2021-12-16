@@ -1,4 +1,4 @@
-local POINTSHOP = Cosmo.ActionType.New("pointshop")
+local POINTSHOP = Cosmo.ActionType.New("ps_points")
 
 function POINTSHOP:HandlePurchase(action, order, ply)
     if not isfunction(ply.PS_GivePoints) then
