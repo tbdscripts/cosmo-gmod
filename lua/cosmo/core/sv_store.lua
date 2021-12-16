@@ -102,5 +102,5 @@ end)
 hook.Add("PlayerSay", "Cosmo.DonateCommand", function(ply, text)
     if not IsValid(ply) or text ~= Cosmo.Config.DonateCommand then return end
   
-    Cosmo.Network:openDonateCommand(ply)
+    Cosmo.Network.OpenDonateCommand(ply)
 end)
