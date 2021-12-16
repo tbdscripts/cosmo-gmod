@@ -59,7 +59,7 @@ hook.Add("PlayerInitialSpawn", "Cosmo.Store.Weapons", function(ply)
             ply.__cosmoWeapons = wepClasses
         end)
         :Catch(function(reason)
-            print("[Cosmo - STORE] Failed to load permanent weapons for player:", ply:SteamID64())
+            Cosmo.Log.Warning("(WEAPONS)", "Failed to load permanent weapons for player:", ply:SteamID64())
         end)
 end)
 

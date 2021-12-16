@@ -41,3 +41,9 @@ Cosmo.Config.Language = {
     NotificationTitle = "Store Purchase",
     NotificationContent = ":player has purchased :package!"
 }
+
+--[[
+    Log Level
+        - You can probably just leave this to the default
+]]
+Cosmo.Config.LogLevel = Cosmo.Log.LEVEL_DEBUG

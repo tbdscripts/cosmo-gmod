@@ -28,7 +28,7 @@ function CUSTOM_LUA:HandlePurchase(action, order, ply)
 
     local err = RunString(replaceVariables(code, ply), "Cosmo Action", false)
     if err then
-        print("[Cosmo - STORE] Failed to run custom lua:", err)
+        Cosmo.Log.Warning("(CUSTOM-LUA) Failed to run custom lua, reason:", err)
     end
     
     clearTemporaryGlobals()
@@ -44,7 +44,7 @@ function CUSTOM_LUA:HandleExpiration(action, order, ply)
 
     local err = RunString(replaceVariables(code, ply), "Cosmo Action Expiration", false)
     if err then
-        print("[Cosmo - STORE] Failed to run custom lua:", err)
+        Cosmo.Log.Warning("(CUSTOM-LUA) Failed to run custom lua, reason:", err)
     end
 
     clearTemporaryGlobals()

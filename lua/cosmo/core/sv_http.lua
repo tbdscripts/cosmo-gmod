@@ -46,10 +46,16 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
         type = headers["Content-Type"],
 
         failed = function(reason)
+            Cosmo.Log.Danger("(HTTP)", "Request failed with reason:", reason)
+            Cosmo.Log.Danger("Endpoint:", url)
+
             promise:Reject(reason)
         end,
 
         success = function(code, body, headers)
+            Cosmo.Log.Debug("(HTTP)", "Request succeeded, status code:", code)
+            Cosmo.Log.Debug("Endpoint:", url)
+
             if body and headers["Content-Type"] == "application/json" then
                 body = util.JSONToTable(body)
             end

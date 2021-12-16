@@ -28,24 +28,21 @@ function Cosmo.LoadFile(path)
         print("[Cosmo] Invalid file realm:", name, "(" .. getPathFromFilename(path) .. ")")
         return
     end
-
-    print("[Cosmo] Loaded file:", name, "(" .. getPathFromFilename(path) .. ")")
 end
 
 function Cosmo.LoadDirectory(dir)
     local files, dirs = file.Find(dir .. "/*", "LUA")
-    local fileCount, dirCount = #files, #dirs
 
-    print("[Cosmo] Loading directory:", dir, format("(%d files, %d sub-directories)", fileCount, dirCount))
-
-    for i = 1, fileCount do
+    for i = 1, #files do
         Cosmo.LoadFile(dir .. "/" .. files[i])
     end
 
-    for i = 1, dirCount do
+    for i = 1, #dirs do
         Cosmo.LoadDirectory(dir .. "/", dirs[i])
     end
 end
+
+Cosmo.LoadFile("cosmo/lib/sh_log.lua")
 
 Cosmo.LoadFile("cosmo/sh_config.lua")
 Cosmo.LoadFile("cosmo/sv_config.lua")
@@ -60,3 +57,5 @@ Cosmo.LoadFile("cosmo/core/sv_store.lua")
 
 Cosmo.LoadFile("cosmo/network/sv_network.lua")
 Cosmo.LoadFile("cosmo/network/cl_network.lua")
+
+Cosmo.Log.Info("Cosmo loaded successfully")

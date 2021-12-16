@@ -12,7 +12,7 @@ function DARKRP_LEVEL:HandlePurchase(action, order, ply)
     elseif GlorifiedLeveling and isfunction(GlorifiedLeveling.AddPlayerLevels) then -- Glorified
         GlorifiedLeveling.AddPlayerLevels(ply, amount)
     else
-        print("[Cosmo - STORE] No compatible leveling system found.")
+        Cosmo.Log.Warning("(DRP-LEVELS)", "No compatible leveling system was found on this server, compatible leveling systems are: Vrondakis and Glorified's")
         return false
     end
 

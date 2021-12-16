@@ -21,7 +21,7 @@ local function handlePendingAction(action, order, ply)
 
     Cosmo.Http:DoRequest("PUT", "/store/actions/" .. action.id .. "/complete")
         :Catch(function(reason)
-            print("Failed to deliver action", action.id)
+            Cosmo.Log.Danger("(STORE)", "Failed to complete action", action.id, "; Receiver is", action.receiver)
         end)
 
     return true
@@ -35,8 +35,6 @@ local function handlePendingOrder(order)
 
     local success = true
 
-    print(#order.actions)
-
     for _, action in ipairs(order.actions) do
         local result = handlePendingAction(action, order, ply)
         if not result then
@@ -48,28 +46,25 @@ local function handlePendingOrder(order)
 
     Cosmo.Http:DoRequest("PUT", "/store/orders/" .. order.id .. "/deliver")
         :Catch(function(reason)
-            print("[Cosmo - Store] Failed to deliver order", order.id)
+            Cosmo.Log.Danger("(STORE)", "Failed to deliver order", order.id, "; Receiver is", order.receiver)
         end)
 end
 
 local function handleExpiredAction(action)
     local actionType = Cosmo.ActionType.FindByName(action.name)
-    print(action.name)
     if not actionType then return end
-
-    print(actionType)
 
     local ply = player.GetBySteamID64(action.receiver)
     if not ply then return end
 
     if not actionType:HandleExpiration(action, action.order, ply) then
-        print("[Cosmo - STORE] Failed to handle expiration of action", action.id)
+        Cosmo.Log.Warning("(STORE)", "Failed to handle expiration of action", action.id)
         return
     end
 
     Cosmo.Http:DoRequest("PUT", "/store/actions/" .. action.id .. "/expire")
         :Catch(function(reason)
-            print("[Cosmo - STORE] Failed to expire action", action.id)
+            Cosmo.Log.Warning("(STORE)", "Failed to expire action", action.id)
         end)
 end
 
@@ -87,7 +82,7 @@ local function fetchPending()
             end
         end)
         :Catch(function(reason)
-            print("Failed to fetch pending from store:", reason)
+            Cosmo.Log.Danger("Failed to fetch pending from store, packages will not be delivered. Details can be found above!")
         end)
 end
 

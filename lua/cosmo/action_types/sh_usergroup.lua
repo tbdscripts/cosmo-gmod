@@ -8,7 +8,7 @@ local function setUsergroup(ply, group)
     elseif (ulx and ULib) or (xAdmin and xAdmin.Github) then // ULX and xAdmin from Owain
         ply:SetUserGroup(group)
     else
-        print("[Cosmo - STORE] No support admin mod found, supported admin mods: SAM, xAdmin, ULX.")
+        Cosmo.Log.Warning("(USERGROUPS) No supported admin mod found, supported admind mods are: SAM, xAdmin and ULX")
         return false
     end
 
