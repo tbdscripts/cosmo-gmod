@@ -16,5 +16,5 @@ Requires version 1.3.3 or up!
 - [x] DarkRP Money
 - [x] Usergroup (SAM, xAdmin 2, xAdmin from Owain, ULX)
 - [x] Weapons (Permanent)
-- [ ] DarkRP Levels 
-- [ ] Pointshop (2)
+- [x] DarkRP Levels 
+- [x] Pointshop (2)
