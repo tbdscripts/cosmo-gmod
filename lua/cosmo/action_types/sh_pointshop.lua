@@ -2,7 +2,7 @@ local POINTSHOP = Cosmo.ActionType.New("ps_points")
 
 function POINTSHOP:HandlePurchase(action, order, ply)
     if not isfunction(ply.PS_GivePoints) then
-        Cosmo.Log.Warning("(POINTSHOP) No pointshop system was found on this server.")
+        Cosmo.Log.Warning("(POINTSHOP)", "No pointshop system was found on this server.")
         return false
     end
     
@@ -22,7 +22,9 @@ function POINTSHOP:HandlePurchase(action, order, ply)
 end
 
 function POINTSHOP:HandleExpiration(action, order, ply)
-    -- NOOP 
+    -- NOOP
+
+    return true
 end
 
 Cosmo.ActionType.Register(POINTSHOP)

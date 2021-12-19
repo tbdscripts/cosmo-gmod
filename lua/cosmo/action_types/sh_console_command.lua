@@ -3,13 +3,13 @@ local replace = string.Replace
 local CONSOLE_COMMAND = Cosmo.ActionType.New("console_command")
 
 local function replaceVariables(command, ply)
-    cmd = replace(command, ":sid64", ply:SteamID64())
-    cmd = replace(command, ":sid", ply:SteamID())
+    command = replace(command, ":sid64", ply:SteamID64())
+    command = replace(command, ":sid", ply:SteamID())
 
     -- Escape dangerous characters that could fuck up the command and potentially run multiple commands
-    cmd = replace(command, ":nick", "\"" .. ply:Nick():gsub("[;\"']", "") .. "\"")
+    command = replace(command, ":nick", "\"" .. ply:Nick():gsub("[;\"']", "") .. "\"")
 
-    return cmd
+    return command
 end
 
 function CONSOLE_COMMAND:HandlePurchase(action, order, ply)

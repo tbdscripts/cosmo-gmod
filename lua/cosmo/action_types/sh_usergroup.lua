@@ -1,14 +1,14 @@
 local USERGROUP = Cosmo.ActionType.New("usergroup")
 
 local function setUsergroup(ply, group)
-    if sam then // SAM
+    if sam then -- SAM
         ply:sam_set_rank(group)
-    elseif xAdmin then // xAdmin from xNator
+    elseif xAdmin then -- xAdmin from xNator
         xAdmin.SetGroup(ply, group)
-    elseif (ulx and ULib) or (xAdmin and xAdmin.Github) then // ULX and xAdmin from Owain
+    elseif (ulx and ULib) or (xAdmin and xAdmin.Github) then -- ULX and xAdmin from Owain
         ply:SetUserGroup(group)
     else
-        Cosmo.Log.Warning("(USERGROUPS) No supported admin mod found, supported admind mods are: SAM, xAdmin and ULX")
+        Cosmo.Log.Warning("(USERGROUPS)", "No supported admin mod found, supported admind mods are: SAM, xAdmin and ULX")
         return false
     end
 

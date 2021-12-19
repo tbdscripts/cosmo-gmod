@@ -45,5 +45,11 @@ Cosmo.Config.Language = {
 --[[
     Log Level
         - You can probably just leave this to the default
+
+    Available Levels
+        - Cosmo.Log.LEVEL_DEBUG
+        - Cosmo.Log.LEVEL_INFO
+        - Cosmo.Log.LEVEL_WARNING
+        - Cosmo.Log.LEVEL_DANGER
 ]]
 Cosmo.Config.LogLevel = Cosmo.Log.LEVEL_INFO
