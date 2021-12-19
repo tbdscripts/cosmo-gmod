@@ -1,6 +1,6 @@
 local CurTime = CurTime
 
-local nextFetch = CurTime()
+local nextFetch
 
 hook.Add("InitPostEntity", "Cosmo.Store.Init", function()
     local baseUrl = string.TrimRight(Cosmo.Config.InstanceUrl, "/") .. "/api/game/"
@@ -12,6 +12,8 @@ hook.Add("InitPostEntity", "Cosmo.Store.Init", function()
 end)
 
 local function handlePendingAction(action, order, ply)
+    Cosmo.Log.Debug("(STORE)", "Attempting to process action", action.id, "for order", order.id, "purchased by", ply:SteamID64())
+
     local actionType = Cosmo.ActionType.FindByName(action.name)
     if not actionType then return false end
 
@@ -24,14 +26,21 @@ local function handlePendingAction(action, order, ply)
             Cosmo.Log.Danger("(STORE)", "Failed to complete action", action.id, "; Receiver is", action.receiver)
         end)
 
+    Cosmo.Log.Debug("(STORE)", "Succeeded to process action", action.id)
+
     return true
 end
 
 local function handlePendingOrder(order)
     if not order.actions then return end
 
+    Cosmo.Log.Debug("(STORE)", "Attempting to process pending order", order.id, "purchased by", order.receiver)
+
     local ply = player.GetBySteamID64(order.receiver)
-    if not ply then return end
+    if not ply then 
+        Cosmo.Log.Debug("(STORE)", "Canceled process attempt, player is not present")
+        return
+    end
 
     local success = true
 
@@ -42,12 +51,16 @@ local function handlePendingOrder(order)
         end
     end
 
-    if not success then return end
+    if not success then
+        Cosmo.Log.Debug("(STORE)", "Failed to process pending order", order.id, "due to one of the actions failing")
+    end
 
     Cosmo.Http:DoRequest("PUT", "/store/orders/" .. order.id .. "/deliver")
         :Catch(function(reason)
             Cosmo.Log.Danger("(STORE)", "Failed to deliver order", order.id, "; Receiver is", order.receiver)
         end)
+
+    Cosmo.Log.Debug("(STORE)", "Succeeded to process pending order", order.id)
 end
 
 local function handleExpiredAction(action)
@@ -71,7 +84,14 @@ end
 local function fetchPending()
     Cosmo.Http:DoRequest("GET", "/store/pending")
         :Then(function(data, status)
-            if status ~= 200 or not data or not istable(data) then return end
+            if status ~= 200 or not data or not istable(data) then
+                Cosmo.Log.Debug("(STORE)", "Invalid response received from API when fetching pending orders.")
+                Cosmo.Log.Debug("(STORE)", "Body:", tostring(data))
+            
+                return
+            end
+
+            Cosmo.Log.Debug("Handling", #data.orders, "pending orders and", #data.actions, "expired actions")
 
             for _, order in ipairs(data.orders) do
                 handlePendingOrder(order)
