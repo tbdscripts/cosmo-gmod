@@ -60,6 +60,11 @@ local function handlePendingOrder(order)
             Cosmo.Log.Danger("(STORE)", "Failed to deliver order", order.id, "; Receiver is", order.receiver)
         end)
 
+    -- order.package: since web-1.6.1
+    if order.package and order.package.name then
+        Cosmo.Network.SendPackagePurchased(ply, order.package.name)
+    end
+
     Cosmo.Log.Debug("(STORE)", "Succeeded to process pending order", order.id)
 end
 

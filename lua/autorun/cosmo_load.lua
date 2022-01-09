@@ -48,6 +48,7 @@ Cosmo.LoadFile("cosmo/sh_config.lua")
 Cosmo.LoadFile("cosmo/sv_config.lua")
 
 Cosmo.LoadFile("cosmo/lib/sh_promise.lua")
+Cosmo.LoadFile("cosmo/lib/cl_shadows.lua")
 
 Cosmo.LoadFile("cosmo/core/sh_action_type.lua")
 Cosmo.LoadDirectory("cosmo/action_types")
@@ -57,5 +58,7 @@ Cosmo.LoadFile("cosmo/core/sv_store.lua")
 
 Cosmo.LoadFile("cosmo/network/sv_network.lua")
 Cosmo.LoadFile("cosmo/network/cl_network.lua")
+
+Cosmo.LoadFile("cosmo/ui/cl_notification.lua")
 
 Cosmo.Log.Info("Cosmo loaded successfully")

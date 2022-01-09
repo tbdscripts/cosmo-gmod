@@ -29,6 +29,7 @@ Cosmo.Config.NotificationTime = 3
 Cosmo.Config.NotificationTheme = {
     Background = Color(30, 30, 30),
     Header = Color(40, 40, 40),
+    HeaderTitle = Color(255, 255, 255),
 
     Roundness = 6,
 }
