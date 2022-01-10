@@ -4,7 +4,7 @@ Requires version 1.3.3 or up!
 
 ## Setting Up
 1. Download this repository as a ZIP file.
-    - Head to [this](https://github.com/tbdscripts/cosmo-gmod/releases/tag/2.0.1) page
+    - Head to [this](https://github.com/tbdscripts/cosmo-gmod/releases/latest) page
     - Download the source code under `Assets`
 2. Place the folder inside your server's `addons` folder.
 3. Configure the configs found in `lua/cosmo/` (only `sh_config.lua` and `sv_config.lua`).
