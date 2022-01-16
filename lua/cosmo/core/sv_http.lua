@@ -28,7 +28,7 @@ function HTTP_CLIENT:SetAuthorizationToken(token)
 end
 
 local function httpSuccess(code, body, headers)
-    if code != 200 then
+    if code >= 400 then
         return httpFailed("Returned invalid response code: " .. code)
     end
     
