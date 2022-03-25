@@ -41,6 +41,8 @@ function WEAPONS:HandleExpiration(action, order, ply)
 end
 
 hook.Add("PlayerInitialSpawn", "Cosmo.Store.Weapons", function(ply)
+    Cosmo.Log.Debug("(WEAPONS)", "Retrieving weapons for", ply:Nick())
+    
     Cosmo.Http:DoRequest("GET", "/store/weapons/" .. ply:SteamID64())
         :Then(function(data)
             if not IsValid(ply) or not istable(data) then return end
