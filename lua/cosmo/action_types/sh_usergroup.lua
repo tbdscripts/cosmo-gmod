@@ -4,7 +4,10 @@ local function setUsergroup(ply, group)
     if sam then -- SAM
         ply:sam_set_rank(group)
     elseif (ulx and ULib) then -- ULX 
-        pcall(ULib.ucl.addUser, ply:SteamID64(), nil, nil, group)
+        res, err = pcall(ULib.ucl.addUser, ply:SteamID64(), nil, nil, group)
+        if err then
+            Cosmo.Log.Warning("(USERGROUPS)", "Something went wrong with ULX integration")
+        end
     elseif xAdmin then -- xAdmin from xNator
         xAdmin.SetGroup(ply, group)
     elseif (xAdmin and xAdmin.Github) then -- xAdmin from Owain
