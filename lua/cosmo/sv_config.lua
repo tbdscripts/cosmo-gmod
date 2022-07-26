@@ -8,8 +8,9 @@ Cosmo.Config = Cosmo.Config or {}
         - This token can be found (and regenerated) at Management -> Components -> Servers
         - Tokens are unique per server!
         - Do not share this token with anyone!
+        - Include the 1| part (number may be different)
 ]]
-Cosmo.Config.ServerToken = "<your token>"
+Cosmo.Config.ServerToken = "your token"
 
 --[[
     Fetch Interval
