@@ -3,12 +3,13 @@ Using this Garry's Mod addon allows you to automate your Cosmo store with Garry'
 Requires version 1.3.3 or up!
 
 ## Setting Up
-1. Download this repository as a ZIP file.
+1. OPTIONAL: Install [CHTTP](https://github.com/timschumi/gmod-chttp/releases/latest) OR [Reqwest](https://github.com/WilliamVenner/gmsv_reqwest/releases/latest)
+2. Download this repository as a ZIP file.
     - Head to [this](https://github.com/tbdscripts/cosmo-gmod/releases/latest) page
     - Download the source code under `Assets`
-2. Place the folder inside your server's `addons` folder.
-3. Configure the configs found in `lua/cosmo/` (only `sh_config.lua` and `sv_config.lua`).
-4. Restart your server.
+3. Place the folder inside your server's `addons` folder.
+4. Configure the configs found in `lua/cosmo/` (only `sh_config.lua` and `sv_config.lua`).
+5. Restart your server.
 
 ## Supported Action Types
 - [x] Console Command

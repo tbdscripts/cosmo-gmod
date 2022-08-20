@@ -1,6 +1,15 @@
 local assert, isstring = assert, isstring
 local trimLeft, trimRight, upper = string.TrimLeft, string.TrimRight, string.upper
 local mergeTable = table.Merge
+local newHTTP
+
+if pcall(require, "reqwest") and reqwest ~= nil then
+    newHTTP = reqwest
+elseif pcall(require, "chttp") and CHTTP ~= nil then
+    newHTTP = CHTTP
+else
+    newHTTP = HTTP
+end
 
 local HTTP_CLIENT = {}
 HTTP_CLIENT.__index = HTTP_CLIENT
@@ -38,15 +47,15 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
     local url = (self.Defaults.BaseUrl or "") .. "/" .. trimLeft(endpoint, "/")
     local promise = Cosmo.Promise.new()
 
-    HTTP({
+    newHTTP({
         method = verb,
         url = url,
         headers = headers,
         body = data,
         type = headers["Content-Type"],
 
-        failed = function(reason)
-            Cosmo.Log.Danger("(HTTP)", "Request failed with reason:", reason)
+        failed = function(err, errExt)
+            Cosmo.Log.Danger("(HTTP)", "Request failed: ".. err .. " (".. errExt.. ")")
             Cosmo.Log.Danger("Endpoint:", url)
 
             promise:Reject(reason)
