@@ -3,7 +3,7 @@ Using this Garry's Mod addon allows you to automate your Cosmo store with Garry'
 Requires version 1.3.3 or up!
 
 ## Setting Up
-1. OPTIONAL: Install [CHTTP](https://github.com/timschumi/gmod-chttp/releases/latest) OR [Reqwest](https://github.com/WilliamVenner/gmsv_reqwest/releases/latest)
+1. OPTIONAL: Install [Reqwest](https://github.com/WilliamVenner/gmsv_reqwest/releases/latest) OR [CHTTP](https://github.com/timschumi/gmod-chttp/releases/latest)
 2. Download this repository as a ZIP file.
     - Head to [this](https://github.com/tbdscripts/cosmo-gmod/releases/latest) page
     - Download the source code under `Assets`

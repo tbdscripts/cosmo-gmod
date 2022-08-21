@@ -55,7 +55,11 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
         type = headers["Content-Type"],
 
         failed = function(err, errExt)
-            Cosmo.Log.Danger("(HTTP)", "Request failed: ".. err .. " (".. errExt.. ")")
+            if not errExt then
+                Cosmo.Log.Danger("(HTTP)", "Request failed with reason: ".. err)
+            else
+                Cosmo.Log.Danger("(HTTP)", "Request failed with reason: ".. err .. " (".. errExt.. ")")
+            end
             Cosmo.Log.Danger("Endpoint:", url)
 
             promise:Reject(reason)
