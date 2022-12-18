@@ -32,7 +32,7 @@ Cosmo.ActionType.Register(PS2_STANDARD_POINTS)
 
 local PS2_PREMIUM_POINTS = Cosmo.ActionType.New("ps2_premium_points")
 
-function PS2_PREMIUM_POINTS:HandlePurchase()
+function PS2_PREMIUM_POINTS:HandlePurchase(action, order, ply)
     if not isfunction(ply.PS2_AddPremiumPoints) then 
         Cosmo.Log.Warning("(POINTSHOP2)", "No pointshop system was found on this server")
         return false
