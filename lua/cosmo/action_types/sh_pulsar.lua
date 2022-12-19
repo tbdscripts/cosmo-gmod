@@ -8,14 +8,13 @@ function PULSAR:HandlePurchase(action, order, ply)
     if not amount then return false end
 
     if not Lyth_Pulsar then
-        Cosmo.Log.Warning("Pulsar is not installed, failed to handle purchase.")
+        Cosmo.Log.Danger("(PUSLAR)", "Pulsar is not installed, failed to handle purchase.")
         return false
     end
 
     local res, err = pcall(Lyth_Pulsar.DB.GiveCredits, nil, ply, amount)
     if not res then
-        Cosmo.Log.Danger("Failed to give credits to user!")
-        Cosmo.Log.Danger(err)
+        Cosmo.Log.Danger("(PULSAR)", "Failed to give credits to user, reason: " .. err)
 
         return false
     end

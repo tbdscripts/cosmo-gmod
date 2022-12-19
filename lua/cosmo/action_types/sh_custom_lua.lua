@@ -6,7 +6,7 @@ local function replaceVariables(code, ply)
     code = replace(code, ":sid64", ply:SteamID64())
     code = replace(code, ":sid", ply:SteamID())
 
-    -- Adding nick to here felt too dangerous
+    -- Adding nick here felt too dangerous
 
     return code
 end

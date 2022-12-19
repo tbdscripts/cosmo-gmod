@@ -1,27 +1,27 @@
 local assert, isstring = assert, isstring
 local trimLeft, trimRight, upper = string.TrimLeft, string.TrimRight, string.upper
+local startsWith = string.StartWith
 local mergeTable = table.Merge
-local newHTTP
 
-if pcall(require, "reqwest") and reqwest ~= nil then
-    newHTTP = reqwest
-elseif pcall(require, "chttp") and CHTTP ~= nil then
-    newHTTP = CHTTP
-else
-    newHTTP = HTTP
+local httpFunc = HTTP
+if pcall(require, "reqwest") and isfunction(reqwest) then
+    httpFunc = reqwest
+elseif pcall(require, "chttp") and isfunction(CHTTP) then
+    httpFunc = CHTTP
 end
 
 local HTTP_CLIENT = {}
 HTTP_CLIENT.__index = HTTP_CLIENT
 
 function HTTP_CLIENT.new()
-    local inst = setmetatable({}, HTTP_CLIENT)
-    inst.Defaults = {}
-    inst.Defaults.Headers = {
-        ["Accept"] = "application/json",
-        ["Content-Type"] = "application/json"
-    }
-    return inst
+    return setmetatable({
+        Defaults = {
+            Headers = {
+                ["Accept"] = "application/json",
+                ["Content-Type"] = "application/json"
+            }
+        }
+    }, HTTP_CLIENT)
 end
 
 function HTTP_CLIENT:SetBaseUrl(baseUrl)
@@ -47,7 +47,7 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
     local url = (self.Defaults.BaseUrl or "") .. "/" .. trimLeft(endpoint, "/")
     local promise = Cosmo.Promise.new()
 
-    newHTTP({
+    httpFunc({
         method = verb,
         url = url,
         headers = headers,
@@ -55,11 +55,7 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
         type = headers["Content-Type"],
 
         failed = function(err, errExt)
-            if not errExt then
-                Cosmo.Log.Danger("(HTTP)", "Request failed with reason: ".. err)
-            else
-                Cosmo.Log.Danger("(HTTP)", "Request failed with reason: ".. err .. " (".. errExt.. ")")
-            end
+            Cosmo.Log.Danger("(HTTP)", "Request failed with reason: " .. err .. (errExt and ("(" .. errExt .. ")") or ""))
             Cosmo.Log.Danger("Endpoint:", url)
 
             promise:Reject(reason)
@@ -69,7 +65,10 @@ function HTTP_CLIENT:DoRequest(verb, endpoint, data, headers)
             Cosmo.Log.Debug("(HTTP)", "Request succeeded, status code:", code)
             Cosmo.Log.Debug("Endpoint:", url)
 
-            if body and headers["Content-Type"] == "application/json" then
+            -- It seems like reqwest makes header names lowercase.
+            local contentType = headers["Content-Type"] or headers["content-type"]
+
+            if body and startsWith(contentType, "application/json") then
                 body = util.JSONToTable(body)
             end
 
