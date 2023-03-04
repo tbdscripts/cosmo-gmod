@@ -3,11 +3,22 @@ local trimLeft, trimRight, upper = string.TrimLeft, string.TrimRight, string.upp
 local startsWith = string.StartWith
 local mergeTable = table.Merge
 
+local function checkInstalled(module)
+    if BRANCH ~= "unknown" then return true end -- util.IsBinaryModuleInstalled is currently only on the main/dev branches. Thanks rubat
+
+    return util.IsBinaryModuleInstalled(module) or false
+end
+
 local httpFunc = HTTP
-if pcall(require, "reqwest") and isfunction(reqwest) then
+if checkInstalled("reqwest") and isfunction(reqwest) then
+    pcall(require, "reqwest")
     httpFunc = reqwest
-elseif pcall(require, "chttp") and isfunction(CHTTP) then
+elseif checkInstalled("chttp") and isfunction(CHTTP) then
+    pcall(require, "chttp")
     httpFunc = CHTTP
+else
+    Cosmo.Log.Warning("Reqwest or CHTTP not found! It is reccomended to install one of these modules.")
+    Cosmo.Log.Warning("https://docs.tbdscripts.com/docs/installation/garrys-mod#installing-a-http-module")
 end
 
 local HTTP_CLIENT = {}
